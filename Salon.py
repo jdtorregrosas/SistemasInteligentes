@@ -137,10 +137,11 @@ def cruzarCalendarios(calendarioA, calendarioB):
     return calendarioA, calendarioB
  
 def mutacion(calendario):
-    salonAleatorio = random.randint(0,1)
-    diaAleatorio = random.randint(0,1)
-    materiaAleatoria = random.randint(0,1)
-    print(calendario[salonAleatorio].horario.listaDias[diaAleatorio].listaMaterias[materiaAleatoria].horasAsignadas)
+    salonAleatorio = random.randint(0,len(calendario)-1)
+    diaAleatorio = random.randint(0,len(calendario[salonAleatorio].horario.listaDias)-1)
+    materiaAleatoria = random.randint(0,len(calendario[salonAleatorio].horario.listaDias[diaAleatorio].listaMaterias)-1)
+    calendario[salonAleatorio].horario.listaDias[diaAleatorio].listaMaterias[materiaAleatoria].cantidadEstudiantes = random.randint(30, 100)
+    print(calendario[salonAleatorio].horario.listaDias[diaAleatorio].listaMaterias[materiaAleatoria].cantidadEstudiantes)
     
 numSalones = 2
 numMaterias = 90
@@ -148,12 +149,12 @@ calendarioA = crearCalendario(llenarMaterias(numMaterias), numSalones, numMateri
 calendarioB = crearCalendario(llenarMaterias(numMaterias), numSalones, numMaterias)
 # OPERADOR DE CRUCE !!!!!
 #cruzarCalendarios(calendarioA, calendarioB)
-#mutacion(calendarioA)
+mutacion(calendarioA)
 values = []
 calendarios = []
 for i in range(10):
     calendarioA = crearCalendario(llenarMaterias(numMaterias), numSalones, numMaterias)
     calendarios.append(calendarioA)
     values.append(funcionObjetivoporCalendario(calendarioA))
-print(values)
+#print(values)
 
