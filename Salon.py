@@ -5,6 +5,8 @@ Created on 28/09/2014
 @author: Mrguyfawkes
 '''
 import random
+import math
+
 from random import randint
 #CLASES PRINCIPALES
 class Salon:
@@ -44,27 +46,23 @@ class Horario:
     def printHorario(self):
         for i in range(0,len(self.listaDias)):
             self.listaDias[i].printDia()
-#VARIABLES NECESARIAS
-numSalones = 2
-numMaterias = 90
-salones = []
-materias = []
+
 #LLENAR LAS MATERIAS CON UN NOMBRE (N�MERO ENTERO) Y HORAS SEMANALES (4 o 6 de forma aleatoria)
-for j in range (1,numMaterias+1): 
-#     if random.random()<0.6 :
-#         horasSem = 4
-#     else:
-    cantidadEstudiantes = 0
-    if j<30:
-        cantidadEstudiantes = random.gauss(35, 5)
-    elif j>=30 & j<60:
-        cantidadEstudiantes = random.gauss(30,5)
-    else:
-        cantidadEstudiantes = random.gauss(80, 15)
-    horasSem = 4
-    materias.append(Materia(j, horasSem, cantidadEstudiantes))
+def llenarMaterias(numMaterias):
+    materias = []
+    for j in range (1,numMaterias+1):
+        cantidadEstudiantes = 0
+        if j<30:
+            cantidadEstudiantes = random.gauss(35, 5)
+        elif j>=30 & j<60:
+            cantidadEstudiantes = random.gauss(30,5)
+        else:
+            cantidadEstudiantes = random.gauss(80, 15)
+        horasSem = 4
+        materias.append(Materia(j, horasSem, cantidadEstudiantes))
+    return materias
 #M�todo que crea una lista de 6 materias    
-def llenarDia(materias, dia):
+def llenarDia(materias, dia, numMaterias):
     listaMaterias=[]
     for i in range (1,8):
         matAleat=randint(1, len(materias))
@@ -76,27 +74,62 @@ def llenarDia(materias, dia):
             matAleat= randint(1, numMaterias)    
             i = i - 1
     return Dia(listaMaterias,dia)
-def crearHorario(materias):
+def crearHorario(materias, numMaterias):
     dias = []
     #SE LLENA UNA LISTA DE D�AS CON LISTAS DE MATERIAS
     for i in range(1,6):
-        dias.append(llenarDia(materias,i))
+        dias.append(llenarDia(materias,i, numMaterias))
     horario = Horario(dias)
     return horario
 #LLENAR LOS SALONES CON UNA CAPACIDAD ALEATORIA Y UN N�MERO DE SAL�N I
-for i in range (1,numSalones+1):
-    if i<=2:#2 auditorios con capacidad de 100 estudiantes
-        capacidad = 100
-    elif i>2 & i <=4 :#2 salones con capacidad de 40 estudiantes
-        capacidad = 40
-    elif i>4 & i<=6:
-        capacidad = 35
-    else:
-        capacidad = random.randint(20,40)
-    horario = crearHorario(materias)
-    salones.append(Salon(capacidad, i,horario))
+def crearCalendario(materias, numSalones, numMaterias):
+    salones = []
+    for i in range (1,numSalones+1):
+        if i<=2:#2 auditorios con capacidad de 100 estudiantes
+            capacidad = 100
+        elif i>2 & i <=4 :#2 salones con capacidad de 40 estudiantes
+            capacidad = 40
+        elif i>4 & i<=6:
+            capacidad = 35
+        else:
+            capacidad = random.randint(20,40)
+        horario = crearHorario(materias, numMaterias)
+        salones.append(Salon(capacidad, i,horario))
+    #imprimirCalendario(salones)
+    return salones
 
-for i in range(0,len(salones)):
-    print ("----------------------------------SALON:", i+1,"------------------------------------")
-    salones[i].horario.printHorario()
+def imprimirCalendario(calendario):
+    print ("---------------")
+    for i in range(0,len(calendario)):
+        print ("----------------------------------SALON:", i+1,"------------------------------------")
+        calendario[i].horario.printHorario()
+    
+def cruzarCalendarios(calendarioA, calendarioB):
+    print ("CALENDARIO A --------")
+    imprimirCalendario(calendarioA)
+    print ("CALENDARIO B --------")
+    imprimirCalendario(calendarioB)
+    
+    for i in range(0,math.floor(len(calendarioA)/2)):
+        temp = calendarioA[i].horario
+        temp2 = calendarioB[i].horario
+        calendarioA[i].horario=temp2
+        calendarioB[i].horario=temp
+
+    print ("CALENDARIO A --------")
+    imprimirCalendario(calendarioA)
+    print ("CALENDARIO B --------")
+    imprimirCalendario(calendarioB)
+    
+    return calendarioA, calendarioB
+       
+numSalones = 2
+numMaterias = 90
+calendarioA = crearCalendario(llenarMaterias(numMaterias), numSalones, numMaterias)
+calendarioB = crearCalendario(llenarMaterias(numMaterias), numSalones, numMaterias)
+# OPERADOR DE CRUCE !!!!!
+cruzarCalendarios(calendarioA, calendarioB)
+    
+
+
 
