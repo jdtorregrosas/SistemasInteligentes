@@ -164,6 +164,7 @@ for i in range(10):
 #imprimirCalendario(calendarios[chosen[2]])
 
 generaciones = 100
+indiceMutacion = 000.1
 calendariosFinales= []
 for i in range(0,generaciones):
     calendariosNuevos=[]
@@ -179,7 +180,11 @@ for i in range(0,generaciones):
         calendariosNuevos.append(calendario11)
         calendariosNuevos.append(calendario21)
     calendarios = calendariosNuevos
-
+for i in range (10):          
+    probMutacion = random.random()
+    if probMutacion<= indiceMutacion:
+        calendarios[i] = mutacion(calendarios[i])
+        values[i] = funcionObjetivoporCalendario(calendarios[i])
 for i in range (10):          
     imprimirCalendario(calendarios[i])
     
