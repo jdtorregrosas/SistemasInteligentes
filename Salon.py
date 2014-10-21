@@ -149,9 +149,11 @@ calendarioB = crearCalendario(llenarMaterias(numMaterias), numSalones, numMateri
 # OPERADOR DE CRUCE !!!!!
 #cruzarCalendarios(calendarioA, calendarioB)
 #mutacion(calendarioA)
-valuess = []
+values = []
+calendarios = []
 for i in range(10):
     calendarioA = crearCalendario(llenarMaterias(numMaterias), numSalones, numMaterias)
+    calendarios.append(calendarioA)
     values.append(funcionObjetivoporCalendario(calendarioA))
-print(valuess)
+print(values)
 
