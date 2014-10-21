@@ -6,8 +6,10 @@ Created on 28/09/2014
 '''
 import random
 import math
+import Templado
 
 from random import randint
+from win32con import NULL
 #CLASES PRINCIPALES
 class Salon:
     def __init__(self, capacidad, numero, horario):
@@ -118,10 +120,10 @@ def funcionObjetivoporCalendario(calendario):
     return z
     
 def cruzarCalendarios(calendarioA, calendarioB):
-    print ("CALENDARIO A --------")
-    imprimirCalendario(calendarioA)
-    print ("CALENDARIO B --------")
-    imprimirCalendario(calendarioB)
+#     print ("CALENDARIO A --------")
+#     imprimirCalendario(calendarioA)
+#     print ("CALENDARIO B --------")
+#     imprimirCalendario(calendarioB)
     
     for i in range(0,int(len(calendarioA)/2)):
         temp = calendarioA[i].horario
@@ -129,10 +131,10 @@ def cruzarCalendarios(calendarioA, calendarioB):
         calendarioA[i].horario=temp2
         calendarioB[i].horario=temp
 
-    print ("CALENDARIO A --------")
-    imprimirCalendario(calendarioA)
-    print ("CALENDARIO B --------")
-    imprimirCalendario(calendarioB)
+#     print ("CALENDARIO A --------")
+#     imprimirCalendario(calendarioA)
+#     print ("CALENDARIO B --------")
+#     imprimirCalendario(calendarioB)
     
     return calendarioA, calendarioB
  
@@ -157,4 +159,30 @@ for i in range(10):
     calendarios.append(calendarioA)
     values.append(funcionObjetivoporCalendario(calendarioA))
 #print(values)
+#chosen = Templado.simulated_annealing(values)
+#print(chosen)
+#imprimirCalendario(calendarios[chosen[2]])
 
+generaciones = 100
+calendariosFinales= []
+for i in range(0,generaciones):
+    calendariosNuevos=[]
+    values=[]
+    while len(calendarios) != 0:
+        aleat1 = random.randint(0,len(calendarios)-1)
+        calendario1 = calendarios.pop(aleat1)
+        aleat2 = random.randint(0,len(calendarios)-1)
+        calendario2 = calendarios.pop(aleat2)
+        calendario11, calendario21 = cruzarCalendarios(calendario1, calendario2)
+        values.append(funcionObjetivoporCalendario(calendario11))
+        values.append(funcionObjetivoporCalendario(calendario21))
+        calendariosNuevos.append(calendario11)
+        calendariosNuevos.append(calendario21)
+    calendarios = calendariosNuevos
+
+for i in range (10):          
+    imprimirCalendario(calendarios[i])
+    
+    
+    
+    
