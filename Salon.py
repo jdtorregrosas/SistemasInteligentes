@@ -14,7 +14,8 @@ class Salon:
         self.numero=numero
         
 class Materia:
-    def __init__(self, nombre, horasSemanales):
+    def __init__(self, nombre, horasSemanales, cantidadEstudiantes):
+        self.cantidadEstudiantes = cantidadEstudiantes
         self.nombre = nombre
         self.horasSemanales = horasSemanales
         self.horasAsignadas = 0
@@ -45,7 +46,7 @@ class Horario:
             self.listaDias[i].printDia()
 #VARIABLES NECESARIAS
 numSalones = 2
-numMaterias = 35
+numMaterias = 90
 salones = []
 materias = []
 #LLENAR LAS MATERIAS CON UN NOMBRE (N�MERO ENTERO) Y HORAS SEMANALES (4 o 6 de forma aleatoria)
@@ -53,8 +54,15 @@ for j in range (1,numMaterias+1):
 #     if random.random()<0.6 :
 #         horasSem = 4
 #     else:
+    cantidadEstudiantes = 0
+    if j<30:
+        cantidadEstudiantes = random.gauss(35, 5)
+    elif j>=30 & j<60:
+        cantidadEstudiantes = random.gauss(30,5)
+    else:
+        cantidadEstudiantes = random.gauss(80, 15)
     horasSem = 4
-    materias.append(Materia(j, horasSem))
+    materias.append(Materia(j, horasSem, cantidadEstudiantes))
 #M�todo que crea una lista de 6 materias    
 def llenarDia(materias, dia):
     listaMaterias=[]
