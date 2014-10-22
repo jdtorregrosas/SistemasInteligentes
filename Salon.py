@@ -85,7 +85,7 @@ def crearHorario(materias, numMaterias):
 #LLENAR LOS SALONES CON UNA CAPACIDAD ALEATORIA Y UN Nï¿½MERO DE SALï¿½N I
 def crearCalendario(materias, numSalones, numMaterias):
     salones = []
-    for i in range (1,numSalones+1):
+    for i in range (numSalones):
         if i<=2:
             capacidad = 35
         elif i>2 & i <=4 :#2 salones con capacidad de 40 estudiantes
@@ -99,10 +99,10 @@ def crearCalendario(materias, numSalones, numMaterias):
     #imprimirCalendario(salones)
     return salones
 
-def imprimirCalendario(calendario):
-    print ("---------------")
-    for i in range(0,len(calendario)):
-        print ("----------------------------------SALON:", i+1,"------------------------------------")
+def imprimirCalendario(calendario, n):
+    print "-------  IMPRIMIENDO CALENDARIO: ", n , "--------"
+    for i in range(len(calendario)):
+        print "----------------------------------SALON:", i+1,"------------------------------------"
         calendario[i].horario.printHorario()
 
 def funcionObjetivoporCalendario(calendario):
@@ -125,7 +125,7 @@ def cruzarCalendarios(calendarioA, calendarioB):
 #     print ("CALENDARIO B --------")
 #     imprimirCalendario(calendarioB)
     
-    for i in range(0,int(len(calendarioA)/2)):
+    for i in range(int(len(calendarioA)/2)):
         temp = calendarioA[i].horario
         temp2 = calendarioB[i].horario
         calendarioA[i].horario=temp2
@@ -143,7 +143,6 @@ def mutacion(calendario):
     diaAleatorio = random.randint(0,len(calendario[salonAleatorio].horario.listaDias)-1)
     materiaAleatoria = random.randint(0,len(calendario[salonAleatorio].horario.listaDias[diaAleatorio].listaMaterias)-1)
     calendario[salonAleatorio].horario.listaDias[diaAleatorio].listaMaterias[materiaAleatoria].cantidadEstudiantes = random.randint(30, 100)
-    print(calendario[salonAleatorio].horario.listaDias[diaAleatorio].listaMaterias[materiaAleatoria].cantidadEstudiantes)
     
 numSalones = 2
 numMaterias = 90
@@ -151,7 +150,7 @@ calendarioA = crearCalendario(llenarMaterias(numMaterias), numSalones, numMateri
 calendarioB = crearCalendario(llenarMaterias(numMaterias), numSalones, numMaterias)
 # OPERADOR DE CRUCE !!!!!
 #cruzarCalendarios(calendarioA, calendarioB)
-mutacion(calendarioA)
+#mutacion(calendarioA)
 values = []
 calendarios = []
 for i in range(10):
@@ -163,10 +162,11 @@ for i in range(10):
 #print(chosen)
 #imprimirCalendario(calendarios[chosen[2]])
 
-generaciones = 100
-indiceMutacion = 000.1
+generaciones = 1000
+indiceMutacion = 0.00001
 calendariosFinales= []
-for i in range(0,generaciones):
+
+for i in range(generaciones):
     calendariosNuevos=[]
     values=[]
     while len(calendarios) != 0:
@@ -183,10 +183,11 @@ for i in range(0,generaciones):
 for i in range (10):          
     probMutacion = random.random()
     if probMutacion<= indiceMutacion:
-        calendarios[i] = mutacion(calendarios[i])
-        values[i] = funcionObjetivoporCalendario(calendarios[i])
-for i in range (10):          
-    imprimirCalendario(calendarios[i])
+        mutacion(calendarios[i])
+        #values[i] = funcionObjetivoporCalendario(calendarios[i])
+for i in range (10):
+    #print calendarios[i].horario.listaDias[0].listaMaterias[0].cantidadEstudiantes, "<----- longitud"          
+    imprimirCalendario(calendarios[i], i+1)
     
     
     
