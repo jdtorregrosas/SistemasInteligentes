@@ -5,11 +5,9 @@ Created on 28/09/2014
 @author: Mrguyfawkes
 '''
 import random
-import math
 import Templado
 
 from random import randint
-from win32con import NULL
 #CLASES PRINCIPALES
 class Salon:
     def __init__(self, capacidad, numero, horario):
@@ -166,19 +164,30 @@ generaciones = 1000
 indiceMutacion = 0.00001
 calendariosFinales= []
 
+def buscarMejor(values):
+    temp = values[0]
+    indice = 0
+    for i in range(len(values)):
+        if values[i]<temp:
+            temp = values[i]
+            indice =  i
+    return indice
 for i in range(generaciones):
+    calendario1 = calendarios.pop(buscarMejor(values))
+    values.pop(buscarMejor(values))
+    calendario2 = calendarios.pop(buscarMejor(values))
+    values.pop(buscarMejor(values))
+    calendario11, calendario21 = cruzarCalendarios(calendario1, calendario2)
     calendariosNuevos=[]
-    values=[]
-    while len(calendarios) != 0:
-        aleat1 = random.randint(0,len(calendarios)-1)
-        calendario1 = calendarios.pop(aleat1)
-        aleat2 = random.randint(0,len(calendarios)-1)
-        calendario2 = calendarios.pop(aleat2)
-        calendario11, calendario21 = cruzarCalendarios(calendario1, calendario2)
-        values.append(funcionObjetivoporCalendario(calendario11))
-        values.append(funcionObjetivoporCalendario(calendario21))
-        calendariosNuevos.append(calendario11)
-        calendariosNuevos.append(calendario21)
+    values= []
+    values.append(funcionObjetivoporCalendario(calendario11))
+    values.append(funcionObjetivoporCalendario(calendario21))
+    calendariosNuevos.append(calendario11)
+    calendariosNuevos.append(calendario21)
+    for i in range(8):
+        calendarioAleatorio = crearCalendario(llenarMaterias(numMaterias), numSalones, numMaterias)
+        calendariosNuevos.append(calendarioAleatorio)
+        values.append(funcionObjetivoporCalendario(calendarioAleatorio))
     calendarios = calendariosNuevos
 for i in range (10):          
     probMutacion = random.random()
