@@ -98,9 +98,9 @@ def crearCalendario(materias, numSalones, numMaterias):
     return salones
 
 def imprimirCalendario(calendario, n):
-    print "-------  IMPRIMIENDO CALENDARIO: ", n , "--------"
+    print("-------  IMPRIMIENDO CALENDARIO: ", n , "--------")
     for i in range(len(calendario)):
-        print "----------------------------------SALON:", i+1,"------------------------------------"
+        print("----------------------------------SALON:", i+1,"------------------------------------")
         calendario[i].horario.printHorario()
 
 def funcionObjetivoporCalendario(calendario):
@@ -142,7 +142,7 @@ def mutacion(calendario):
     materiaAleatoria = random.randint(0,len(calendario[salonAleatorio].horario.listaDias[diaAleatorio].listaMaterias)-1)
     calendario[salonAleatorio].horario.listaDias[diaAleatorio].listaMaterias[materiaAleatoria].cantidadEstudiantes = random.randint(30, 100)
     
-numSalones = 2
+numSalones = 6
 numMaterias = 90
 calendarioA = crearCalendario(llenarMaterias(numMaterias), numSalones, numMaterias)
 calendarioB = crearCalendario(llenarMaterias(numMaterias), numSalones, numMaterias)
@@ -160,7 +160,7 @@ for i in range(10):
 #print(chosen)
 #imprimirCalendario(calendarios[chosen[2]])
 
-generaciones = 1000
+generaciones = 20000
 indiceMutacion = 0.00001
 calendariosFinales= []
 
@@ -173,31 +173,44 @@ def buscarMejor(values):
             indice =  i
     return indice
 for i in range(generaciones):
+    print(values)
     calendario1 = calendarios.pop(buscarMejor(values))
     values.pop(buscarMejor(values))
     calendario2 = calendarios.pop(buscarMejor(values))
     values.pop(buscarMejor(values))
-    calendario11, calendario21 = cruzarCalendarios(calendario1, calendario2)
     calendariosNuevos=[]
+    calendariosNuevos.append(calendario1)
+    calendariosNuevos.append(calendario2)
+    while len(calendarios)>0:
+        aleat = random.randint(0,len(calendarios)-1)
+        calendario3 = calendarios.pop(aleat)
+        aleat2 = random.randint(0,len(calendarios)-1)
+        calendario4 = calendarios.pop(aleat2)
+        A, B = cruzarCalendarios(calendario3, calendario4)
+        calendariosNuevos.append(A)
+        calendariosNuevos.append(B)
+    
+    #calendario11, calendario21 = cruzarCalendarios(calendario1, calendario2)
     values= []
-    values.append(funcionObjetivoporCalendario(calendario11))
-    values.append(funcionObjetivoporCalendario(calendario21))
-    calendariosNuevos.append(calendario11)
-    calendariosNuevos.append(calendario21)
-    for i in range(8):
-        calendarioAleatorio = crearCalendario(llenarMaterias(numMaterias), numSalones, numMaterias)
-        calendariosNuevos.append(calendarioAleatorio)
-        values.append(funcionObjetivoporCalendario(calendarioAleatorio))
+    for i in range(len(calendariosNuevos)):
+        values.append(funcionObjetivoporCalendario(calendariosNuevos[i]))
+    #values.append(funcionObjetivoporCalendario(calendario21))
+#     calendariosNuevos.append(calendario11)
+#     calendariosNuevos.append(calendario21)
+#     for i in range(8):
+#         calendarioAleatorio = crearCalendario(llenarMaterias(numMaterias), numSalones, numMaterias)
+#         calendariosNuevos.append(calendarioAleatorio)
+#         values.append(funcionObjetivoporCalendario(calendarioAleatorio))
     calendarios = calendariosNuevos
-for i in range (10):          
-    probMutacion = random.random()
-    if probMutacion<= indiceMutacion:
-        mutacion(calendarios[i])
+    for i in range (10):          
+        probMutacion = random.random()
+        if probMutacion<= indiceMutacion:
+            mutacion(calendarios[i])
         #values[i] = funcionObjetivoporCalendario(calendarios[i])
 for i in range (10):
     #print calendarios[i].horario.listaDias[0].listaMaterias[0].cantidadEstudiantes, "<----- longitud"          
     imprimirCalendario(calendarios[i], i+1)
-    
+print(values)
     
     
     
