@@ -146,7 +146,7 @@ def mutacion(calendario):
     salonAleatorio = random.randint(0,len(calendario)-1)
     diaAleatorio = random.randint(0,len(calendario[salonAleatorio].horario.listaDias)-1)
     materiaAleatoria = random.randint(0,len(calendario[salonAleatorio].horario.listaDias[diaAleatorio].listaMaterias)-1)
-    calendario[salonAleatorio].horario.listaDias[diaAleatorio].listaMaterias[materiaAleatoria].cantidadEstudiantes = random.randint(30, 80)
+    calendario[salonAleatorio].horario.listaDias[diaAleatorio].listaMaterias[materiaAleatoria].cantidadEstudiantes = random.randint(35, 100)
     
 def buscarMejor(values):
     temp = values[0]
@@ -157,10 +157,10 @@ def buscarMejor(values):
             indice =  i
     return indice
     
-numSalones = 1 #6
-numMaterias = 30 #90
-generaciones =3
-indiceMutacion = 0.1
+numSalones = 6 #6
+numMaterias = 90 #90
+generaciones =100
+indiceMutacion = 0.0001
 calendariosFinales= []
 values = []
 calendarios = []
@@ -187,10 +187,14 @@ for i in range(generaciones):
     calendariosNuevos.append(calendario1)
     calendariosNuevos.append(calendario2)
     while len(calendarios)>0:
-        aleat = random.randint(0,len(calendarios)-1)
-        calendario3 = calendarios.pop(aleat)
-        aleat2 = random.randint(0,len(calendarios)-1)
-        calendario4 = calendarios.pop(aleat2)
+        calendario3 = calendarios.pop(buscarMejor(values))
+        values.pop(buscarMejor(values))
+        calendario4 = calendarios.pop(buscarMejor(values))
+        values.pop(buscarMejor(values))
+#         aleat = random.randint(0,len(calendarios)-1)
+#         calendario3 = calendarios.pop(aleat)
+#         aleat2 = random.randint(0,len(calendarios)-1)
+#         calendario4 = calendarios.pop(aleat2)
         A, B = cruzarCalendarios(calendario3, calendario4)
         calendariosNuevos.append(A)
         calendariosNuevos.append(B)
