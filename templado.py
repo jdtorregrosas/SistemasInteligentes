@@ -64,9 +64,4 @@ def simulated_annealing(A):
         T = update_temperature(T, k)
         k += 1
 
-    print "iterations:", k
     return x, x_best, x0
-
-test = [1,2,3,4,3,34,5,6,4,4,5,6,4,3,3,3,3,4,6,0,6,5,4,3]
-print test.index(0)
-print simulated_annealing(test)

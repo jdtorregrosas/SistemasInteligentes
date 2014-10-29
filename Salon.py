@@ -29,17 +29,18 @@ class Dia:
         self.nombre = j
     def printDia(self):
         if self.nombre==1:
-            print ("lunes")
+            print ("Lun:\t"),
         elif self.nombre==2:
-            print ("Martes")
+            print ("Mar:\t"),
         elif self.nombre==3:
-            print ("Miercoles")
+            print ("Mie:\t"),
         elif self.nombre==4:
-            print ("Jueves")
+            print ("Jue:\t"),
         elif self.nombre==5:
-            print ("Viernes")
+            print ("Vie:\t"),
         for i in range(len(self.listaMaterias)):
-            print (self.listaMaterias[i].nombre)
+            print self.listaMaterias[i].nombre,"\t",
+        print ""
          
 class Horario:
     def __init__(self, listaDias):
@@ -104,9 +105,9 @@ def crearCalendario(materias, numSalones, numMaterias):
     return salones
 
 def imprimirCalendario(calendario, n):
-    print("-------  IMPRIMIENDO CALENDARIO: ", n , "--------")
+    print "-----------------  IMPRIMIENDO CALENDARIO: ", n , "---------------------------------"
     for i in range(len(calendario)):
-        print("----------------------------------SALON:", i+1,"------------------------------------")
+        print "----------------SALON:", i+1,"---------------------"
         calendario[i].horario.printHorario()
 
 def funcionObjetivoporCalendario(calendario):
@@ -123,8 +124,7 @@ def funcionObjetivoporCalendario(calendario):
                 deltaCapacidades = deltaCapacidades + abs(calendario[i].capacidad - calendario[i].horario.listaDias[j].listaMaterias[k].cantidadEstudiantes)
                 temp= temp+1
     # deltaCapacidades= deltaCapacidades/temp
-    z= deltaCapacidades + repeticiones
-    print "Repeticiones = "+ str(z)
+    z = deltaCapacidades + repeticiones
     return z
     
 def cruzarCalendarios(calendarioA, calendarioB):
@@ -160,7 +160,6 @@ def buscarMejor(values):
         if values[i]<temp:
             temp = values[i]
             indice =  i
-    print "El mejor es " +str(indice)
     return indice
 
 def countMaterias(calendario):
@@ -187,13 +186,16 @@ for i in range(10):
     calendarioA = crearCalendario(llenarMaterias(numMaterias), numSalones, numMaterias)
     calendarios.append(calendarioA)
     values.append(funcionObjetivoporCalendario(calendarioA))
-#print(values)
-#chosen = Templado.simulated_annealing(values)
-#print(chosen)
-#imprimirCalendario(calendarios[chosen[2]])
+print "--------TEMPLADO SIMULADO-----------"
+print ""
+print values
+chosen = templado.simulated_annealing(values)
+print "Mejor valor:", values[chosen[1]]
+print ""
+imprimirCalendario(calendarios[chosen[1]], "Elegido por templado")
 
-for calendario in calendarios:
-    print len(Counter(countMaterias(calendario)).items())
+print ""
+
 
 for i in range(generaciones):
     #print(values)
@@ -230,10 +232,17 @@ for i in range(generaciones):
         if probMutacion<= indiceMutacion:
             mutacion(calendarios[i])
         #values[i] = funcionObjetivoporCalendario(calendarios[i])
-for i in range (10):
+#for i in range (10):
 #     print(calendarios[i].horario.listaDias[0].listaMaterias[0].cantidadEstudiantes, "<----- longitud")          
-    imprimirCalendario(calendarios[i], i+1)
-print(values)
+#    imprimirCalendario(calendarios[i], i+1)
+
 print ""
-for calendario in calendarios:
-    print Counter(countMaterias(calendario))
+#for calendario in calendarios:
+#    print Counter(countMaterias(calendario))
+
+print "--------ALGORITMO GENÉTICO------------"
+print ""
+print(values)
+print "Mejor valor:", values[buscarMejor(values)]
+print ""
+imprimirCalendario(calendarios[buscarMejor(values)], "Elegido por algoritmo genético")
