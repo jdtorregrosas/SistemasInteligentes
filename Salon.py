@@ -5,7 +5,8 @@ Created on 28/09/2014
 @author: Mrguyfawkes
 '''
 import random
-import Templado
+import templado
+from collections import Counter
 
 from random import randint
 #CLASES PRINCIPALES
@@ -109,18 +110,21 @@ def imprimirCalendario(calendario, n):
         calendario[i].horario.printHorario()
 
 def funcionObjetivoporCalendario(calendario):
-    horasTotales = 0
+    repeticiones = 0
     deltaCapacidades = 0
     temp = 0
+    for val in Counter(countMaterias(calendario)).values():
+        if val != 2:
+            repeticiones += 1
+
     for i in range(len(calendario)):
         for j in range(len(calendario[i].horario.listaDias)):
             for k in range(len(calendario[i].horario.listaDias[j].listaMaterias)):
-                horasTotales = horasTotales + calendario[i].horario.listaDias[j].listaMaterias[k].horasSemanales
                 deltaCapacidades = deltaCapacidades + abs(calendario[i].capacidad - calendario[i].horario.listaDias[j].listaMaterias[k].cantidadEstudiantes)
                 temp= temp+1
     # deltaCapacidades= deltaCapacidades/temp
-    z= deltaCapacidades + horasTotales
-    # print(horasTotales)
+    z= deltaCapacidades + repeticiones
+    print "Repeticiones = "+ str(z)
     return z
     
 def cruzarCalendarios(calendarioA, calendarioB):
@@ -143,6 +147,7 @@ def cruzarCalendarios(calendarioA, calendarioB):
     return calendarioA, calendarioB
  
 def mutacion(calendario):
+    print "MUTACIÓN!!!!!!!!!!!!!!!!!!!!!"
     salonAleatorio = random.randint(0,len(calendario)-1)
     diaAleatorio = random.randint(0,len(calendario[salonAleatorio].horario.listaDias)-1)
     materiaAleatoria = random.randint(0,len(calendario[salonAleatorio].horario.listaDias[diaAleatorio].listaMaterias)-1)
@@ -155,8 +160,19 @@ def buscarMejor(values):
         if values[i]<temp:
             temp = values[i]
             indice =  i
+    print "El mejor es " +str(indice)
     return indice
+
+def countMaterias(calendario):
+    materias = []
+    for salon in calendario:
+        for dia in salon.horario.listaDias:
+            materias += dia.listaMaterias
     
+    for i in range(len(materias)):
+        materias[i] = materias[i].nombre
+    return materias
+
 numSalones = 6 #6
 numMaterias = 90 #90
 generaciones =100
@@ -176,9 +192,11 @@ for i in range(10):
 #print(chosen)
 #imprimirCalendario(calendarios[chosen[2]])
 
+for calendario in calendarios:
+    print len(Counter(countMaterias(calendario)).items())
 
 for i in range(generaciones):
-    print(values)
+    #print(values)
     calendario1 = calendarios.pop(buscarMejor(values))
     values.pop(buscarMejor(values))
     calendario2 = calendarios.pop(buscarMejor(values))
@@ -206,10 +224,6 @@ for i in range(generaciones):
 #     values.append(funcionObjetivoporCalendario(calendario21))
 #     calendariosNuevos.append(calendario11)
 #     calendariosNuevos.append(calendario21)
-    for i in range(8):
-        calendarioAleatorio = crearCalendario(llenarMaterias(numMaterias), numSalones, numMaterias)
-        calendariosNuevos.append(calendarioAleatorio)
-        values.append(funcionObjetivoporCalendario(calendarioAleatorio))
     calendarios = calendariosNuevos
     for i in range (10):          
         probMutacion = random.random()
@@ -220,6 +234,6 @@ for i in range (10):
 #     print(calendarios[i].horario.listaDias[0].listaMaterias[0].cantidadEstudiantes, "<----- longitud")          
     imprimirCalendario(calendarios[i], i+1)
 print(values)
-    
-    
-    
+print ""
+for calendario in calendarios:
+    print Counter(countMaterias(calendario))
