@@ -182,7 +182,7 @@ calendarios = []
 # OPERADOR DE CRUCE !!!!!
 #cruzarCalendarios(calendarioA, calendarioB)
 #mutacion(calendarioA)
-for i in range(10):
+for i in range(20):
     calendarioA = crearCalendario(llenarMaterias(numMaterias), numSalones, numMaterias)
     calendarios.append(calendarioA)
     values.append(funcionObjetivoporCalendario(calendarioA))
@@ -227,7 +227,7 @@ for i in range(generaciones):
 #     calendariosNuevos.append(calendario11)
 #     calendariosNuevos.append(calendario21)
     calendarios = calendariosNuevos
-    for i in range (10):          
+    for i in range (20):          
         probMutacion = random.random()
         if probMutacion<= indiceMutacion:
             mutacion(calendarios[i])
